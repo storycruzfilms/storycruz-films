@@ -1,3 +1,4 @@
+// triggering a schema update
 import { defineField, defineType } from 'sanity'
 
 export default defineType({
