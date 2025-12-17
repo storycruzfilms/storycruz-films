@@ -1,6 +1,8 @@
 import { type SchemaTypeDefinition } from 'sanity'
 import homepage from './homepage'
 import siteContent from './siteContent'
+import pricing from './pricing' // <--- You already had this, which is great!
+
 // Import your new files
 import film from './film'
 import photoGallery from './photoGallery'
@@ -9,7 +11,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     homepage,
     siteContent,
-    film,         // <--- Ensure this is here
-    photoGallery, // <--- Ensure this is here
+    pricing,      // <--- ADD THIS HERE so Sanity knows to use it!
+    film,         
+    photoGallery, 
   ],
 }
