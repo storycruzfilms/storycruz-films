@@ -20,6 +20,51 @@ export default defineType({
       options: { hotspot: true }
     }),
     
+// --- NEW: WELCOME POPUP ---
+    defineField({
+      name: 'popupActive',
+      title: 'Enable Welcome Popup?',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Toggle this ON to show a popup message to new visitors.',
+    }),
+    defineField({
+      name: 'popupImage',
+      title: 'Popup Image',
+      type: 'image',
+      hidden: ({document}) => !document?.popupActive, // Hides if toggle is OFF
+      options: { hotspot: true }
+    }),
+    defineField({
+      name: 'popupTitle',
+      title: 'Popup Title',
+      type: 'string',
+      hidden: ({document}) => !document?.popupActive,
+      initialValue: 'Now Booking 2026'
+    }),
+    defineField({
+      name: 'popupText',
+      title: 'Popup Message',
+      type: 'text',
+      hidden: ({document}) => !document?.popupActive,
+      rows: 3
+    }),
+    defineField({
+      name: 'popupLink',
+      title: 'Button Link (Optional)',
+      type: 'string',
+      hidden: ({document}) => !document?.popupActive,
+      description: 'e.g., /inquire or https://google.com'
+    }),
+    defineField({
+      name: 'popupLinkText',
+      title: 'Button Label',
+      type: 'string',
+      hidden: ({document}) => !document?.popupActive,
+      initialValue: 'Learn More'
+    }),
+    // --------------------------
+
     // --- PHOTOS PAGE ---
     defineField({
       name: 'photoHeaderImages',

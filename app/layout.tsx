@@ -1,10 +1,10 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import { Playfair_Display, Lato, Alex_Brush } from "next/font/google"; 
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer"; // 1. Import your new Footer
+import Footer from "@/components/Footer";
 import { client, urlFor } from "@/sanity/client";
+import { WelcomePopup } from "@/components/WelcomePopup";
 
 const playfair = Playfair_Display({ 
   subsets: ["latin"],
@@ -31,12 +31,18 @@ export const metadata: Metadata = {
   description: "High-end wedding photography and videography",
 };
 
-async function getLogo() {
-  const data = await client.fetch(`*[_type == "siteContent"][0]{ navbarLogo }`);
-  if (data?.navbarLogo) {
-    return urlFor(data.navbarLogo).url();
-  }
-  return null;
+// 2. Updated fetch function to get Logo AND Popup data
+async function getData() {
+  return await client.fetch(`*[_type == "siteContent"][0]{ 
+    navbarLogo,
+    // Popup Fields
+    popupActive,
+    popupImage,
+    popupTitle,
+    popupText,
+    popupLink,
+    popupLinkText
+  }`);
 }
 
 export default async function RootLayout({
@@ -44,20 +50,25 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const logoUrl = await getLogo();
+  const data = await getData();
+
+  // Extract the logo URL specifically for the Navbar
+  const logoUrl = data?.navbarLogo ? urlFor(data.navbarLogo).url() : undefined;
 
   return (
     <html lang="en">
-      {/* 2. Added bg-transparent to the body so the WebGL background can show through */}
+      {/* Kept your existing body classes (bg-transparent, fonts, etc.) */}
       <body className={`${playfair.variable} ${lato.variable} ${cursive.variable} antialiased bg-transparent text-offwhite min-h-screen flex flex-col`}>
-        <Navbar logoUrl={logoUrl || undefined} /> 
         
-        {/* 3. Main content area */}
+        {/* 3. The Welcome Popup sits here (it will handle its own display logic) */}
+        <WelcomePopup data={data} />
+
+        <Navbar logoUrl={logoUrl} /> 
+        
         <div className="flex-grow">
           {children}
         </div>
 
-        {/* 4. Global Footer */}
         <Footer />
       </body>
     </html>
