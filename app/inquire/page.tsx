@@ -1,107 +1,80 @@
-import Link from 'next/link';
 import { client } from "@/sanity/client";
+import ContactForm from "@/components/ContactForm";
+
+export const revalidate = 0;
 
 async function getData() {
-  return await client.fetch(`
-    *[_type == "siteContent"][0] {
-      ...,
-      "videoUrl": inquireHeroVideo.asset->url  // 👈 Make sure this matches the new schema name
-    }
-  `);
+  return await client.fetch(`*[_type == "siteContent"][0]{
+    inquireTitle,
+    inquireText,
+    // THE FIX: Get the actual URL of the uploaded video
+    "videoUrl": inquireHeroVideo.asset->url,
+    email,
+    location
+  }`);
 }
 
 export default async function InquirePage() {
   const data = await getData();
-  const pixiesetUrl = "https://storycruzfilms.pixieset.com/contact-form/cf_eniioOifaksZ9zgpyOAUktqPicDw";
 
-  // Use the uploaded video if it exists, otherwise fallback to the local file
-  const backgroundVideo = data?.videoUrl || "/inquire-bg.mp4";
+  // Logic: Use Sanity video first. If missing, use local fallback.
+  const videoSource = data?.videoUrl || "/inquire-bg.mp4";
 
   return (
-    <main className="min-h-screen bg-background pb-20">
+    <main className="min-h-screen bg-black text-white">
       
-      {/* 1. HERO VIDEO SECTION */}
-      <section className="relative h-[50vh] md:h-[60vh] w-full overflow-hidden mb-16">
-        {/* Key prop ensures React re-renders if the video source changes */}
+      {/* 1. HERO SECTION */}
+      <section className="relative min-h-[40vh] flex items-center justify-center overflow-hidden py-20">
+        
+        {/* VIDEO BACKGROUND */}
         <video
-          key={backgroundVideo} 
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
         >
-          <source src={backgroundVideo} type="video/mp4" />
+          {/* Now using the correct variable */}
+          <source src={videoSource} type="video/mp4" />
         </video>
         
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/50" />
+        {/* Overlay Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black" />
         
-        {/* Gradient Fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
-
-        {/* Title */}
-        <div className="relative z-10 flex h-full items-center justify-center">
-          <h1 className="font-serif text-3xl md:text-5xl tracking-widest text-white opacity-35">
-            We'd Love to Connect
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-10">
+          <p className="text-xs font-bold tracking-[0.3em] uppercase text-white/60 mb-6">
+            Contact Us
+          </p>
+          <h1 className="text-4xl md:text-6xl font-serif text-white mb-6">
+            {data?.inquireTitle || "Let's Create Something Beautiful"}
           </h1>
+          <p className="text-lg text-white/80 font-light max-w-2xl mx-auto leading-relaxed">
+            {data?.inquireText}
+          </p>
         </div>
       </section>
 
-      {/* 2. EXISTING CONTENT GRID */}
-      <div className="max-w-6xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        
-        {/* Left Side: Dynamic Contact Info */}
-        <div className="flex flex-col justify-center text-center lg:text-left">
-          <h2 className="text-3xl md:text-5xl font-serif text-accent mb-6">
-            {data?.inquireTitle || "Let's Create"}
-          </h2>
-          <p className="text-offwhite/80 font-sans leading-relaxed mb-8 text-lg whitespace-pre-wrap">
-            {data?.inquireText || "Contact us for pricing and availability."}
-          </p>
+      {/* 2. THE FORM SECTION */}
+      <section className="px-4 md:px-12 pt-0 pb-20 bg-black">
+        <div className="max-w-4xl mx-auto">
           
-          <div className="space-y-4 text-sm tracking-widest uppercase text-white/60 flex flex-col items-center lg:items-start">
-            {data?.location && (
-              <p className="border-l border-accent pl-4">{data.location}</p>
-            )}
-            {data?.email && (
-              <p className="border-l border-accent pl-4">{data.email}</p>
-            )}
-            <p className="border-l border-accent pl-4">@storycruzfilms</p>
+          <div className="flex items-center justify-center gap-4 mb-12 opacity-30">
+            <div className="h-[1px] w-20 bg-white" />
+            <span className="font-serif italic">Please fill out the form below</span>
+            <div className="h-[1px] w-20 bg-white" />
           </div>
+
+          <ContactForm />
+          
         </div>
+      </section>
 
-        {/* Right Side: Animated "Calling" Link */}
-        <div className="flex items-center justify-center w-full min-h-[400px]">
-          <Link 
-            href={pixiesetUrl}
-            target="_blank"
-            className="group relative flex items-center justify-center w-64 h-64 md:w-80 md:h-80"
-          >
-            {/* The 'Calling' Pulse Animation */}
-            <div className="absolute inset-0 rounded-full border border-white/20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] opacity-50" />
-            
-            {/* The Main Circle Button */}
-            <div className="relative flex flex-col items-center justify-center w-full h-full rounded-full border border-white/30 bg-black/20 backdrop-blur-sm transition-all duration-500 group-hover:scale-105 group-hover:border-accent group-hover:bg-white/5">
-              
-              <h3 className="font-serif text-4xl italic text-white transition-colors duration-300 group-hover:text-accent">
-                Inquire
-              </h3>
-              
-              <div className="flex items-center gap-2 mt-2 overflow-hidden">
-                 <span className="text-xs uppercase tracking-[0.3em] text-white/60 group-hover:translate-x-[-150%] transition-transform duration-500">
-                    Click Here
-                 </span>
-                 <span className="absolute text-2xl text-accent translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500">
-                    &rarr;
-                 </span>
-              </div>
+      {/* 3. CONTACT INFO */}
+      <section className="text-center pb-24 text-white/40 text-sm tracking-widest space-y-2">
+        <p>{data?.email}</p>
+        <p>{data?.location}</p>
+      </section>
 
-            </div>
-          </Link>
-        </div>
-
-      </div>
     </main>
   );
 }
