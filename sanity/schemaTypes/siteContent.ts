@@ -7,6 +7,7 @@ export default defineType({
   fieldsets: [
     { name: 'about', title: 'About Page' },
     { name: 'inquire', title: 'Inquire Page' },
+    { name: 'photos', title: 'Photos Page' }, // The new group
     { name: 'titles', title: 'Gallery Page Titles' },
     { name: 'footer', title: 'Footer Content' },
   ],
@@ -19,6 +20,16 @@ export default defineType({
       options: { hotspot: true }
     }),
     
+    // --- PHOTOS PAGE (Only ONE definition here) ---
+    defineField({
+      name: 'photoHeaderImages',
+      title: 'Photo Page Header Slideshow',
+      type: 'array',
+      fieldset: 'photos',
+      description: 'Upload 6-10 high-quality photos. They will cross-fade automatically.',
+      of: [{ type: 'image', options: { hotspot: true } }],
+    }),
+
     // --- ABOUT PAGE ---
     defineField({
       name: 'aboutTitle',
@@ -45,7 +56,7 @@ export default defineType({
       name: 'aboutSignature',
       title: 'About Page Signature',
       type: 'string',
-      fieldset: 'about', // Added this so it stays with About content
+      fieldset: 'about',
       description: 'This will appear in a handwritten font (e.g., "Love, Quay & Christine")',
       initialValue: 'Love, Quay & Christine',
     }),
@@ -65,13 +76,11 @@ export default defineType({
       fieldset: 'inquire',
     }),
     defineField({
-      name: 'inquireVideo',
+      name: 'inquireHeroVideo', // Keeping the "Hero" name we fixed earlier
       title: 'Inquire Page Hero Video',
       type: 'file', 
-      fieldset: 'inquire', // Added this so it appears in the Inquire group
-      options: {
-        accept: 'video/mp4,video/webm', 
-      },
+      fieldset: 'inquire',
+      // options removed to prevent conflict
     }),
     defineField({
       name: 'email',

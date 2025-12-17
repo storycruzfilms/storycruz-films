@@ -2,11 +2,10 @@ import Link from 'next/link';
 import { client } from "@/sanity/client";
 
 async function getData() {
-  // We use a GROQ projection { ... } to specifically grab the URL from the uploaded file asset
   return await client.fetch(`
     *[_type == "siteContent"][0] {
       ...,
-      "videoUrl": inquireVideo.asset->url
+      "videoUrl": inquireHeroVideo.asset->url  // 👈 Make sure this matches the new schema name
     }
   `);
 }
