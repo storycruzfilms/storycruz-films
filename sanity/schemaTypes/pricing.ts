@@ -11,6 +11,17 @@ export default defineType({
       type: 'string',
       initialValue: 'Investment Guide 2025'
     }),
+
+    // --- ADD THIS NEW FIELD ---
+    defineField({
+      name: 'slug',
+      title: 'Page Link (Slug)',
+      type: 'slug',
+      description: 'This defines the secret link. e.g. "weddings" becomes .../investment/weddings',
+      options: { source: 'title' },
+      validation: Rule => Rule.required()
+    }),
+    // --------------------------
     
     // --- NEW VIDEO FIELD ---
     defineField({
