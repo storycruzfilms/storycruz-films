@@ -59,6 +59,8 @@ export default async function InvestmentPage() {
             <Star size={12} fill="currentColor" />
             <Star size={12} fill="currentColor" />
             <Star size={12} fill="currentColor" />
+            <Star size={12} fill="currentColor" />
+            <Star size={12} fill="currentColor" />
           </div>
           
           <p className="text-xs md:text-sm font-bold tracking-[0.4em] uppercase text-white/60 mb-8">
