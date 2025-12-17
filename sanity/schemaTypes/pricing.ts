@@ -11,6 +11,16 @@ export default defineType({
       type: 'string',
       initialValue: 'Investment Guide 2025'
     }),
+    
+    // --- NEW VIDEO FIELD ---
+    defineField({
+      name: 'heroVideo',
+      title: 'Hero Background Video',
+      type: 'file',
+      options: { accept: 'video/*' },
+      description: 'Upload the background video here (mp4). If empty, it will use the default.'
+    }),
+
     // VIDEO PACKAGES
     defineField({
       name: 'videoPackages',
