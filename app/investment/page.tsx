@@ -1,6 +1,7 @@
 import { client } from "@/sanity/client";
 import { Check } from "lucide-react";
 
+export const revalidate = 0; // <--- ADD THIS LINE
 // 1. THIS HIDES THE PAGE FROM GOOGLE SEARCH
 export const metadata = {
   title: 'Investment Guide | Story Cruz Films',
