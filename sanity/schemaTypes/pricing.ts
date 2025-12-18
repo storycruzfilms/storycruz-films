@@ -12,7 +12,6 @@ export default defineType({
       initialValue: 'Investment Guide 2025'
     }),
 
-    // --- ADD THIS NEW FIELD ---
     defineField({
       name: 'slug',
       title: 'Page Link (Slug)',
@@ -21,9 +20,7 @@ export default defineType({
       options: { source: 'title' },
       validation: Rule => Rule.required()
     }),
-    // --------------------------
     
-    // --- NEW VIDEO FIELD ---
     defineField({
       name: 'heroVideo',
       title: 'Hero Background Video',
@@ -47,6 +44,7 @@ export default defineType({
         ]
       }]
     }),
+
     // PHOTO PACKAGES
     defineField({
       name: 'photoPackages',
@@ -61,6 +59,43 @@ export default defineType({
           { name: 'features', type: 'array', title: 'Features List', of: [{ type: 'string' }] }
         ]
       }]
+    }),
+
+    // FAQ SECTION WITH CATEGORIES
+    defineField({
+      name: 'faqs',
+      title: 'Frequently Asked Questions',
+      type: 'array',
+      description: 'Add common questions and answers for this specific investment guide.',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { 
+              name: 'category', 
+              title: 'Category', 
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Experience & Philosophy', value: 'Experience & Philosophy' },
+                  { title: 'Travel & Logistics', value: 'Travel & Logistics' },
+                  { title: 'Creative & Delivery', value: 'Creative & Delivery' },
+                  { title: 'Booking & Investment', value: 'Booking & Investment' },
+                ],
+              },
+              validation: Rule => Rule.required()
+            },
+            { name: 'question', title: 'Question', type: 'string' },
+            { name: 'answer', title: 'Answer', type: 'text' }
+          ],
+          preview: {
+            select: {
+              title: 'question',
+              subtitle: 'category'
+            }
+          }
+        }
+      ]
     }),
   ]
 })
