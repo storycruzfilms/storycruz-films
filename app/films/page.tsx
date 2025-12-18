@@ -1,7 +1,7 @@
 import { client, urlFor } from "@/sanity/client";
 import Link from "next/link";
 import Image from "next/image";
-import BackgroundWater from "@/components/BackgroundWater"; // 1. Import the background
+import BackgroundWater from "@/components/BackgroundWater";
 
 // Helper to extract Video ID
 const getYouTubeId = (url: string) => {
@@ -40,22 +40,13 @@ async function getData() {
   return { projects, title: settings?.filmsTitle };
 }
 
-  const settings = await client.fetch(`*[_type == "siteContent"][0]{ filmsTitle }`);
-
-  return { projects, title: settings?.filmsTitle };
-}
-
 export default async function FilmsPage() {
   const { projects, title } = await getData();
 
   return (
-    // 2. Change bg-background to bg-transparent
     <main className="relative min-h-screen pt-32 px-6 md:px-12 bg-transparent pb-20 overflow-x-hidden">
-      
-      {/* 3. Add the background component */}
       <BackgroundWater />
 
-      {/* 4. Wrap everything in a relative z-10 container */}
       <div className="relative z-10 max-w-6xl mx-auto">
         <h1 className="text-4xl md:text-6xl font-serif text-accent mb-12 text-center">
           {title || "Cinematic Films"}
@@ -74,7 +65,6 @@ export default async function FilmsPage() {
                 className="group block relative"
               >
                 <div className="relative aspect-video bg-neutral-900/40 overflow-hidden mb-4 border border-white/5 backdrop-blur-sm">
-                  
                   {displayImage ? (
                     <Image 
                       src={displayImage} 
@@ -89,13 +79,11 @@ export default async function FilmsPage() {
                     </div>
                   )}
 
-                  {/* Play Button Overlay */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-16 h-16 rounded-full border border-offwhite/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 bg-black/20 backdrop-blur-sm">
                       <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-offwhite border-b-[10px] border-b-transparent ml-1"></div>
                     </div>
                   </div>
-
                 </div>
                 
                 <div className="text-center">
