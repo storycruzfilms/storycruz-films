@@ -19,20 +19,22 @@ const getYouTubeThumbnail = (url: string) => {
 
 async function getData() {
   // Fetch films with the 'film' tag
-  const projects = await client.fetch(`
-    *[_type == "film" && defined(youtubeUrl) && defined(slug.current)] | order(publishedAt desc) {
+  const projects = await client.fetch(
+    `*[_type == "film" && defined(youtubeUrl) && defined(slug.current)] | order(publishedAt desc) {
       title,
       slug,
       customThumbnail,
       youtubeUrl
-    }
-  `, {}, { next: { tags: ['film'] } }); // Added tag
+    }`, 
+    {}, 
+    { next: { tags: ['film'] } }
+  );
 
   // Fetch settings with the 'siteContent' tag
   const settings = await client.fetch(
     `*[_type == "siteContent"][0]{ filmsTitle }`,
     {},
-    { next: { tags: ['siteContent'] } } // Added tag
+    { next: { tags: ['siteContent'] } }
   );
 
   return { projects, title: settings?.filmsTitle };
