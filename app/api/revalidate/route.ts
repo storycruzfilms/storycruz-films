@@ -1,4 +1,4 @@
-import { revalidateTag } from 'next-cache'
+import { revalidateTag } from 'next/cache' // Fixed the import here
 import { type NextRequest, NextResponse } from 'next/server'
 import { parseBody } from 'next-sanity/webhook'
 
@@ -17,16 +17,11 @@ export async function POST(req: NextRequest) {
       return new NextResponse('Bad Request', { status: 400 })
     }
 
-    // This clears the cache for all data fetched with Sanity
+    // This triggers the instant refresh for the specific content type
     revalidateTag(body._type)
     
-    return NextResponse.json({ 
-        revalidated: true, 
-        now: Date.now(), 
-        type: body._type 
-    })
+    return NextResponse.json({ revalidated: true, now: Date.now() })
   } catch (err: any) {
-    console.error(err)
     return new NextResponse(err.message, { status: 500 })
   }
 }
