@@ -1,3 +1,4 @@
+export const revalidate = 0;
 import { client, urlFor } from "@/sanity/client";
 import Image from "next/image";
 import AboutSlideshow from "@/components/AboutSlideshow";
